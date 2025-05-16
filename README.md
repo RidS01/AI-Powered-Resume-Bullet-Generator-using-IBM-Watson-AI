@@ -1,2 +1,88 @@
-# AI-Powered-Resume-Bullet-Generator-using-IBM-Watson-AI
-The project aims to build a tool that uses generative AI to automatically rewrite informal task statements into effective, professional resume bullet points. It also integrates tone analysis to ensure output meets recruiter standards.
+: IBM Cloud Setup
+•	Create an account at IBM Cloud.
+•	Provision a project under Watsonx.ai with the appropriate model.
+•	Retrieve:
+o	Bearer Token
+o	Project ID
+o	Model ID: meta-llama/llama-3-3-70b-instruct
+
+Step 2: Make API Calls with curl
+bash
+CopyEdit
+curl "https://eu-de.ml.cloud.ibm.com/ml/v1/text/generation?version=2023-05-29" \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json' \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{
+    "input": "Can you rewrite \"Managed daily office operations\" as a professional resume bullet?",
+    "parameters": {
+      "decoding_method": "greedy",
+      "max_new_tokens": 150
+    },
+    "model_id": "meta-llama/llama-3-3-70b-instruct",
+    "project_id": "YOUR_PROJECT_ID"
+  }'
+Python Version Using requests
+python
+CopyEdit
+import requests
+
+url = "https://eu-de.ml.cloud.ibm.com/ml/v1/text/generation?version=2023-05-29"
+
+headers = {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+
+body = {
+    "input": "Can you rewrite \"Managed daily office operations\" as a professional resume bullet?",
+    "parameters": {
+        "decoding_method": "greedy",
+        "max_new_tokens": 150
+    },
+    "model_id": "meta-llama/llama-3-3-70b-instruct",
+    "project_id": "YOUR_PROJECT_ID"
+}
+
+response = requests.post(url, headers=headers, json=body)
+
+if response.status_code == 200:
+    print(response.json()["results"][0]["generated_text"])
+else:
+    print("Error:", response.text)
+
+
+ Step 4: JavaScript Version (Node.js)
+javascript
+CopyEdit
+export const generateText = async () => {
+  const url = "https://eu-de.ml.cloud.ibm.com/ml/v1/text/generation?version=2023-05-29";
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+    },
+    body: JSON.stringify({
+      input: 'Can you rewrite "Managed daily office operations" as a professional resume bullet?',
+      parameters: {
+        decoding_method: "greedy",
+        max_new_tokens: 150
+      },
+      model_id: "meta-llama/llama-3-3-70b-instruct",
+      project_id: "YOUR_PROJECT_ID"
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
+
+  const result = await response.json();
+  return result.results[0].generated_text;
+}
+
+
