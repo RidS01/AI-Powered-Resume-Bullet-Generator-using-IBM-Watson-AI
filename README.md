@@ -1,3 +1,29 @@
+![image](https://github.com/user-attachments/assets/93875fc0-3a9d-41fc-88c3-d079c38a6488)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 : IBM Cloud Setup
 •	Create an account at IBM Cloud.
 •	Provision a project under Watsonx.ai with the appropriate model.
