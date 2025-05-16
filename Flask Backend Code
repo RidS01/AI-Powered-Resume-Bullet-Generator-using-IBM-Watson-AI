@@ -1,1 +1,48 @@
+from flask import Flask, request, jsonify, render_template
+import requests
+
+app = Flask(__name__)
+
+# Replace with your IBM credentials
+API_URL = "https://eu-de.ml.cloud.ibm.com/ml/v1/text/generation?version=2023-05-29"
+BEARER_TOKEN = "YOUR_ACCESS_TOKEN"
+PROJECT_ID = "YOUR_PROJECT_ID"
+MODEL_ID = "meta-llama/llama-3-3-70b-instruct"
+
+# Home route
+@app.route('/')
+def index():
+    return render_template("index.html")
+
+# Route to generate bullet point
+@app.route('/generate', methods=['POST'])
+def generate_bullet():
+    input_text = request.form['job_input']
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {BEARER_TOKEN}"
+    }
+
+    payload = {
+        "input": f"Can you rewrite \"{input_text}\" as a professional resume bullet?",
+        "parameters": {
+            "decoding_method": "greedy",
+            "max_new_tokens": 150
+        },
+        "model_id": MODEL_ID,
+        "project_id": PROJECT_ID
+    }
+
+    response = requests.post(API_URL, headers=headers, json=payload)
+
+    if response.status_code == 200:
+        result = response.json()['results'][0]['generated_text']
+        return jsonify({'bullet': result})
+    else:
+        return jsonify({'error': 'Failed to fetch bullet point'}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
