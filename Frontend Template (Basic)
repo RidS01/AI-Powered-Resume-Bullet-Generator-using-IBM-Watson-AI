@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Bullet Generator</title>
+</head>
+<body>
+    <h2>AI Resume Bullet Generator</h2>
+    <form id="bulletForm">
+        <input type="text" name="job_input" placeholder="Enter your job responsibility" required>
+        <button type="submit">Generate</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('bulletForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/generate', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            document.getElementById('result').innerText = data.bullet || "Error generating bullet.";
+        };
+    </script>
+</body>
+</html>
 
